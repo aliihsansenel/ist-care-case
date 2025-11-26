@@ -1,0 +1,105 @@
+{
+  "project": {
+    "name": "Test Builder Layout",
+    "version": "1.0",
+    "created": "2024-01-15T10:30:00Z",
+    "lastModified": "2024-01-15T11:45:00Z"
+  },
+  "canvas": {
+    "width": 1200,
+    "height": 800,
+    "grid": {
+      "enabled": true,
+      "size": 10,
+      "snap": true
+    }
+  },
+  "elements": [
+    {
+      "id": "elem_header_001",
+      "type": "header",
+      "content": {
+        "text": "Site Başlığı",
+        "style": "default"
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "width": "100%",
+        "height": 80,
+        "zIndex": 1
+      },
+      "responsive": {
+        "mobile": {
+          "width": "100%",
+          "height": 60
+        },
+        "tablet": {
+          "width": "100%",
+          "height": 70
+        }
+      }
+    },
+    {
+      "id": "elem_card_001",
+      "type": "card",
+      "content": {
+        "title": "Card 1",
+        "description": "İçerik açıklaması",
+        "image": null
+      },
+      "position": {
+        "x": 50,
+        "y": 100,
+        "width": 300,
+        "height": 200,
+        "zIndex": 2
+      },
+      "responsive": {
+        "mobile": {
+          "x": 10,
+          "width": "calc(100% -20px)"}, "tablet": {"x": 30, "width": 350} } }, { "id": "elem_card_002", "type": "card", "content": { "title":"Card 2",
+          "description": "İkinci card içeriği",
+          "image": null
+        },
+        "position": {
+          "x": 400,
+          "y": 100,
+          "width": 300,
+          "height": 200,
+          "zIndex": 3
+        }
+      },
+      {
+        "id": "elem_text_001",
+        "type": "text-content",
+        "content": {
+          "html": "Metin içeriği buraya gelecek", "plainText": "Metin içeriği buraya gelecek" }, "position": { "x": 50, "y": 320, "width":650,
+          "height": "auto",
+          "minHeight": 100,
+          "zIndex": 4
+        }
+      },
+      {
+        "id": "elem_footer_001",
+        "type": "footer",
+        "content": {
+          "copyright": "© 2024 Test Builder",
+          "links": []
+        },
+        "position": {
+          "x": 0,
+          "y": "calc(100% - 60px)",
+          "width": "100%",
+          "height": 60,
+          "zIndex": 5,
+          "fixed": true
+        }
+      }
+    ],
+    "metadata": {
+      "totalElements": 5,
+      "exportFormat": "json",
+      "exportVersion": "2.0"
+    }
+  }
