@@ -1,0 +1,14 @@
+.sidebar {
+  background-color: #ccc;
+
+  padding: 2em;
+}
+
+.sidebar .comps-title {
+  text-transform: uppercase;
+}
+
+.sidebar .comps-cont {
+  display: flex;
+  flex-direction: column;
+}
