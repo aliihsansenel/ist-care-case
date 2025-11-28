@@ -1,0 +1,26 @@
+div.app {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+
+   /* Minimum horizontal width */
+  min-width: 1000px;
+  height: 100vh;
+  overflow-x: auto;
+}
+
+/* Preview Container area */
+main.preview-cont {
+  flex: 1 1 600px;
+  min-width: 600px;
+  background: #eee;
+}
+
+/* Sidebar */
+aside.sidebar {
+  flex: 0 1 350px;
+  min-width: 250px;
+  max-width: 350px;     
+  background: #ccc;
+}
