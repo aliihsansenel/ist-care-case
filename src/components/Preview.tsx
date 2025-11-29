@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./style/preview.css";
+import ComponentSelector from "./ComponentSelector";
 
 const Preview = () => {
   const [droppedComps, setDroppedComps] = React.useState<string[]>([]);
@@ -22,14 +23,10 @@ const Preview = () => {
       className="preview"
       style={{ border: "2px dashed #ccc", padding: 0 }}
     >
-      {droppedComps.map((type, index) => (
-        <div
-          key={index}
-          style={{ padding: 10, border: "1px solid blue", margin: 5 }}
-        >
-          {type} Component
-        </div>
-      ))}
+      {droppedComps.map((type) => {
+        const Selected = ComponentSelector({ type });
+        return <Selected />;
+      })}
     </div>
   );
 };

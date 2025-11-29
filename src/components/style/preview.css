@@ -1,4 +1,6 @@
 .preview {
   flex: 1 1 auto;
+
+  position: relative;
   background-color: #dbdbdb;
 }
