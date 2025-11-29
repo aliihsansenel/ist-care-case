@@ -1,4 +1,4 @@
-import PreviewArea from "./components/PreviewArea";
+import PreviewArea from "./components/PreviewContainer";
 import Sidebar from "./components/Sidebar";
 
 import "./App.css";
@@ -6,8 +6,8 @@ import "./App.css";
 function App() {
   return (
     <div className={"app"}>
-      <PreviewArea></PreviewArea>
-      <Sidebar></Sidebar>
+      <PreviewArea />
+      <Sidebar />
     </div>
   );
 }

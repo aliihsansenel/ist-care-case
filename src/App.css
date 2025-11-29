@@ -15,6 +15,9 @@ main.preview-cont {
   flex: 1 1 600px;
   min-width: 600px;
   background: #eee;
+
+  display: flex;
+  padding: 1em;
 }
 
 /* Sidebar */
