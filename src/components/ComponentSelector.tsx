@@ -1,6 +1,8 @@
 import React from "react";
+
 import Header from "./Header";
 import Footer from "./Footer";
+import TextContent from "./TextContent";
 
 interface ComponentSelectorProps {
   type: string;
@@ -12,8 +14,10 @@ const ComponentSelector = ({ type }: ComponentSelectorProps): React.FC => {
       return Header;
     case "footer":
       return Footer;
+    case "text-content":
+      return TextContent;
     default:
-      return Header;
+      return TextContent;
   }
 };
 

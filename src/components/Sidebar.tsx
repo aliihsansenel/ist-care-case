@@ -8,6 +8,7 @@ function Sidebar() {
       <div className="comps-cont">
         <DraggableItem type="header" />
         <DraggableItem type="footer" />
+        <DraggableItem type="text-content" />
       </div>
     </aside>
   );

@@ -1,7 +1,8 @@
 import React from "react";
 
-import "./style/preview.css";
 import ComponentSelector from "./ComponentSelector";
+
+import "./style/preview.css";
 
 const Preview = () => {
   const [droppedComps, setDroppedComps] = React.useState<string[]>([]);
