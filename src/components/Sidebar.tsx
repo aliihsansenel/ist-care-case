@@ -9,6 +9,7 @@ function Sidebar() {
         <DraggableItem type="header" />
         <DraggableItem type="footer" />
         <DraggableItem type="text-content" />
+        <DraggableItem type="card" />
       </div>
     </aside>
   );

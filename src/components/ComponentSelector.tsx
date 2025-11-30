@@ -1,23 +1,28 @@
 import React from "react";
 
+import TextContent from "./TextContent";
 import Header from "./Header";
 import Footer from "./Footer";
-import TextContent from "./TextContent";
+import Card from "./Card";
 
-interface ComponentSelectorProps {
-  type: string;
-}
+import type { TypeWithCoordinates } from "./types";
 
-const ComponentSelector = ({ type }: ComponentSelectorProps): React.FC => {
+const ComponentSelector = ({
+  type,
+  left,
+  top,
+}: TypeWithCoordinates): React.ReactElement => {
   switch (type) {
     case "header":
-      return Header;
+      return <Header />;
     case "footer":
-      return Footer;
+      return <Footer />;
     case "text-content":
-      return TextContent;
+      return <TextContent />;
+    case "card":
+      return <Card left={left} top={top} />;
     default:
-      return TextContent;
+      return <Header />;
   }
 };
 
