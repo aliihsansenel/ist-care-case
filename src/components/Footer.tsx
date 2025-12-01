@@ -1,7 +1,8 @@
-const Footer = () => {
+const Footer = ({ elementId }: { elementId: string | null }) => {
   return (
     <footer
       className="footer"
+      data-element-id={elementId}
       style={{
         border: "2px solid black",
         position: "absolute",

@@ -5,24 +5,25 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Card from "./Card";
 
-import type { TypeWithCoordinates } from "./types";
+import type { ElementData } from "./types";
 
 const ComponentSelector = ({
+  id,
   type,
   left,
   top,
-}: TypeWithCoordinates): React.ReactElement => {
+}: ElementData): React.ReactElement => {
   switch (type) {
     case "header":
-      return <Header />;
+      return <Header key={id} elementId={id} />;
     case "footer":
-      return <Footer />;
+      return <Footer key={id} elementId={id} />;
     case "text-content":
-      return <TextContent />;
+      return <TextContent key={id} elementId={id} />;
     case "card":
-      return <Card left={left} top={top} />;
+      return <Card key={id} elementId={id} left={left} top={top} />;
     default:
-      return <Header />;
+      return <Header elementId={id} />;
   }
 };
 

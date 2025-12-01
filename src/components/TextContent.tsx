@@ -3,7 +3,7 @@ import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
 
-const TextContent = () => {
+const TextContent = ({ elementId }: { elementId: string | null }) => {
   const [content, setContent] = useState("");
 
   const onContentChange = React.useCallback((evt: ContentEditableEvent) => {
@@ -12,6 +12,7 @@ const TextContent = () => {
 
   return (
     <ContentEditable
+      data-element-id={elementId}
       style={{
         border: "2px solid black",
         width: "100%",

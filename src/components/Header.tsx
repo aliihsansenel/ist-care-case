@@ -1,7 +1,8 @@
-const Header = () => {
+const Header = ({ elementId }: { elementId: string | null }) => {
   return (
     <header
       className="header"
+      data-element-id={elementId}
       style={{
         border: "2px solid black",
         position: "sticky",
