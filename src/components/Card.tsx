@@ -3,6 +3,8 @@ import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
 
+import "./style/preview.css";
+
 const Card = ({ left, top }: { left: number; top: number }) => {
   const [content, setContent] = useState("");
 
@@ -10,12 +12,10 @@ const Card = ({ left, top }: { left: number; top: number }) => {
     setContent(evt.currentTarget.innerHTML);
   }, []);
 
-  console.log({ left, top });
   return (
     <ContentEditable
+      className="card"
       style={{
-        position: "relative",
-        border: "2px solid black",
         width: "300px",
         height: "200px",
         left,

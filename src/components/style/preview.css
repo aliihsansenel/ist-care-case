@@ -4,3 +4,11 @@
   position: relative;
   background-color: #dbdbdb;
 }
+
+.card {
+  position: absolute;
+
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+}

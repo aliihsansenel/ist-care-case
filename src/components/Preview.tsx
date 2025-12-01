@@ -28,7 +28,11 @@ const Preview = () => {
     if (!gridEnabled) {
       setDroppedComps([
         ...droppedComps,
-        { type, left: pos.x - rect.left, top: pos.y - rect.top },
+        {
+          type,
+          left: `${((pos.x - rect.left) / rect.width) * 100.0}%`,
+          top: pos.y - rect.top,
+        },
       ]);
     } else {
       setDroppedComps([...droppedComps, { type, left: 0, top: 0 }]);
