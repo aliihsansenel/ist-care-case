@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useContext } from "react";
 import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
 
 import "./style/preview.css";
 import { selectionEvents } from "../utils/selectionPubSub";
+import { DeleteElementContext } from "./Preview";
 
 const Card = ({
   elementId,
@@ -17,6 +18,7 @@ const Card = ({
 }) => {
   const [content, setContent] = useState("");
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const { deleteElement } = useContext(DeleteElementContext);
 
   const elementRef = useRef<HTMLDivElement>(null);
 

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, createContext } from "react";
 
 import { GridContext } from "../App";
 import ComponentSelector from "./ComponentSelector";
@@ -7,10 +7,22 @@ import type { ElementDataArray } from "./types";
 
 import "./style/preview.css";
 
+export type DeleteElementContextType = {
+  deleteElement: (elementId: string | null) => void;
+};
+// TODO learn how to move to another file.
+export const DeleteElementContext = createContext<DeleteElementContextType>({
+  deleteElement: () => {},
+});
+
 const Preview = () => {
   const { enabled: gridEnabled } = useContext(GridContext);
 
   const [droppedComps, setDroppedComps] = React.useState<ElementDataArray>([]);
+
+  const deleteElement = (elementId: string | null) => {
+    setDroppedComps((comps) => comps.filter((comp) => comp.id !== elementId));
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -60,14 +72,16 @@ const Preview = () => {
   };
 
   return (
-    <div
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-      id="preview"
-      style={{ border: "2px dashed #ccc", padding: 0 }}
-    >
-      {droppedComps.map((data) => ComponentSelector(data))}
-    </div>
+    <DeleteElementContext.Provider value={{ deleteElement }}>
+      <div
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        id="preview"
+        style={{ border: "2px dashed #ccc", padding: 0 }}
+      >
+        {droppedComps.map((data) => ComponentSelector(data))}
+      </div>
+    </DeleteElementContext.Provider>
   );
 };
 
