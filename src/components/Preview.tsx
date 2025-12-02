@@ -17,30 +17,45 @@ const Preview = () => {
   };
 
   const handleDrop = (e: React.DragEvent) => {
-    const type = e.dataTransfer.getData("type");
-
-    // TODO temporary id management
-    const newId =
-      droppedComps.length === 0
-        ? "0"
-        : String(Number(droppedComps.at(-1)?.id) + 1);
+    const elementData = JSON.parse(e.dataTransfer.getData("elementData"));
     const preview: HTMLElement = document.getElementById("preview")!;
 
     const pos = { x: e.clientX, y: e.clientY };
     const rect = preview.getBoundingClientRect();
 
-    if (!gridEnabled) {
+    let left: number | string, top: number | string;
+
+    if (elementData.elementId !== undefined && elementData.elementId !== null) {
+      // TODO grid enabled scenario
+      left = `${((pos.x - rect.left + elementData.offsetX) / rect.width) * 100.0}%`;
+      top = pos.y - rect.top + elementData.offsetY;
+      setDroppedComps((comps) =>
+        comps.map((comp) =>
+          comp.id === elementData.elementId ? { ...comp, left, top } : comp
+        )
+      );
+    } else {
+      if (!gridEnabled) {
+        left = `${((pos.x - rect.left) / rect.width) * 100.0}%`;
+        top = pos.y - rect.top;
+      } else {
+        left = 0;
+        top = 0;
+      }
+      // TODO temporary id management for new item
+      const newId =
+        droppedComps.length === 0
+          ? "0"
+          : String(Number(droppedComps.at(-1)?.id) + 1);
       setDroppedComps([
         ...droppedComps,
         {
           id: newId,
-          type,
-          left: `${((pos.x - rect.left) / rect.width) * 100.0}%`,
-          top: pos.y - rect.top,
+          type: elementData.type,
+          left,
+          top,
         },
       ]);
-    } else {
-      setDroppedComps([...droppedComps, { id: newId, type, left: 0, top: 0 }]);
     }
   };
 

@@ -12,3 +12,8 @@
   border: 2px solid black;
   border-radius: 10px;
 }
+
+.hidden {
+  /* visibility or display property changes does not work. */
+  opacity: 0.01;
+}

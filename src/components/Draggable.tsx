@@ -1,6 +1,6 @@
 const DraggableItem = ({ type }: { type: string }) => {
   const handleDragStart = (e: React.DragEvent) => {
-    e.dataTransfer.setData("type", type);
+    e.dataTransfer.setData("elementData", JSON.stringify({ type }));
   };
 
   // const handleDrag = (e: React.DragEvent) => {

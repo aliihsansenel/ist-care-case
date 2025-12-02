@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
@@ -18,6 +18,8 @@ const Card = ({
   const [content, setContent] = useState("");
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
+  const elementRef = useRef<HTMLDivElement>(null);
+
   const onContentChange = useCallback((evt: ContentEditableEvent) => {
     setContent(evt.currentTarget.innerHTML);
   }, []);
@@ -33,11 +35,35 @@ const Card = ({
     };
   }, [elementId]);
 
+  const handleDragStart = (e: React.DragEvent) => {
+    if (elementRef.current) {
+      elementRef.current?.classList.add("hidden");
+      const preview: HTMLElement = document.getElementById("preview")!;
+      const pos = { x: e.clientX, y: e.clientY };
+      const previewRect = preview.getBoundingClientRect();
+      const selfRect = elementRef.current.getBoundingClientRect()!;
+
+      e.dataTransfer.setData(
+        "elementData",
+        JSON.stringify({
+          elementId,
+          type: "card",
+          offsetX: previewRect.left - pos.x + selfRect.left,
+          offsetY: previewRect.top - pos.y + selfRect.top,
+        })
+      );
+    }
+  };
+
   return (
-    <ContentEditable
+    <div
       className="card"
+      ref={elementRef}
       data-element-id={elementId}
       onClick={() => selectionEvents.publish(elementId)}
+      draggable={true}
+      onDragStart={handleDragStart}
+      onDragEnd={() => elementRef.current?.classList.remove("hidden")}
       style={{
         width: "300px",
         height: "200px",
@@ -46,9 +72,9 @@ const Card = ({
         // TODO Temporary indicator of focused element
         backgroundColor: isSelected ? "blue" : "initial",
       }}
-      onChange={onContentChange}
-      html={content}
-    />
+    >
+      <ContentEditable onChange={onContentChange} html={content} />
+    </div>
   );
 };
 
