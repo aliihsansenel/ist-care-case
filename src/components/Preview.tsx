@@ -1,19 +1,11 @@
-import React, { useContext, createContext } from "react";
-
-import { GridContext } from "../App";
-import ComponentSelector from "./ComponentSelector";
+import React, { useContext } from "react";
 
 import type { ElementDataArray } from "./types";
+import { DeleteElementContext, GridContext } from "./contexts";
+
+import ComponentSelector from "./ComponentSelector";
 
 import "./style/preview.css";
-
-export type DeleteElementContextType = {
-  deleteElement: (elementId: string | null) => void;
-};
-// TODO learn how to move to another file.
-export const DeleteElementContext = createContext<DeleteElementContextType>({
-  deleteElement: () => {},
-});
 
 const Preview = () => {
   const { enabled: gridEnabled } = useContext(GridContext);

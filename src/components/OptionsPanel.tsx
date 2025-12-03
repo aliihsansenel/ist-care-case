@@ -1,7 +1,6 @@
-import { useContext } from "react";
-import type { RefObject } from "react";
+import { useContext, type RefObject } from "react";
 
-import { DeleteElementContext } from "./Preview";
+import { DeleteElementContext } from "./contexts";
 
 import "./style/preview.css";
 
