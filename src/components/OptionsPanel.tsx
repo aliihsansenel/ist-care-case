@@ -1,21 +1,25 @@
 import { useContext } from "react";
+import type { RefObject } from "react";
 
 import { DeleteElementContext } from "./Preview";
 
 import "./style/preview.css";
 
-const OptionsPanel = ({
+type OptionsPanelProps<T extends HTMLElement = HTMLElement> = {
+  children: React.ReactNode;
+  elementId: string | null;
+  elementRef: RefObject<T | null>;
+  isSelected: boolean;
+};
+
+const OptionsPanel = <T extends HTMLElement = HTMLElement>({
   children,
   elementId,
   elementRef,
   isSelected,
-}: {
-  children: React.ReactNode;
-  elementId: string | null;
-  elementRef: HTMLElement;
-  isSelected: boolean;
-}) => {
+}: OptionsPanelProps<T>) => {
   const { deleteElement } = useContext(DeleteElementContext);
+  void elementRef;
 
   return (
     <div className="options-panel-cont" style={{}}>

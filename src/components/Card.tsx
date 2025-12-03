@@ -19,7 +19,7 @@ const Card = ({
   const [content, setContent] = useState("");
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
-  const elementRef = useRef<HTMLElement>(null);
+  const elementRef = useRef<HTMLDivElement | null>(null);
 
   const onContentChange = useCallback((evt: ContentEditableEvent) => {
     setContent(evt.currentTarget.innerHTML);
