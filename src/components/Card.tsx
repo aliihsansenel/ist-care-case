@@ -1,11 +1,11 @@
-import { useEffect, useState, useCallback, useRef, useContext } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
 
 import "./style/preview.css";
 import { selectionEvents } from "../utils/selectionPubSub";
-import { DeleteElementContext } from "./Preview";
+import OptionsPanel from "./OptionsPanel";
 
 const Card = ({
   elementId,
@@ -18,9 +18,8 @@ const Card = ({
 }) => {
   const [content, setContent] = useState("");
   const [isSelected, setIsSelected] = useState<boolean>(false);
-  const { deleteElement } = useContext(DeleteElementContext);
 
-  const elementRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLElement>(null);
 
   const onContentChange = useCallback((evt: ContentEditableEvent) => {
     setContent(evt.currentTarget.innerHTML);
@@ -71,11 +70,15 @@ const Card = ({
         height: "200px",
         left,
         top,
-        // TODO Temporary indicator of focused element
-        backgroundColor: isSelected ? "blue" : "initial",
       }}
     >
-      <ContentEditable onChange={onContentChange} html={content} />
+      <OptionsPanel
+        elementId={elementId}
+        elementRef={elementRef}
+        isSelected={isSelected}
+      >
+        <ContentEditable onChange={onContentChange} html={content} />
+      </OptionsPanel>
     </div>
   );
 };

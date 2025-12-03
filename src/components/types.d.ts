@@ -5,4 +5,6 @@ export type ElementData = {
   top: number | string;
 };
 
+// export type ElementRefTypes =
+
 export type ElementDataArray = ElementData[];
