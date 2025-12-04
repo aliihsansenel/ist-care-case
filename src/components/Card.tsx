@@ -8,6 +8,7 @@ import { selectionEvents } from "../utils/selectionPubSub";
 import OptionsPanel from "./OptionsPanel";
 
 import "./style/preview.css";
+import { useResizable } from "../hooks/useResizable";
 
 const Card = ({
   elementId,
@@ -22,8 +23,14 @@ const Card = ({
 }) => {
   const [content, setContent] = useState("");
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [size, setSize] = useState({ width: 300, height: 200 });
+
+  // local flag to enable resizing mode (when true, the card should not be draggable)
+  const [isResizingMode, setIsResizingMode] = useState<boolean>(false);
 
   const elementRef = useRef<HTMLDivElement | null>(null);
+  // pass isResizingMode to the hook so it only starts resizing when mode is enabled.
+  useResizable(elementRef, (s) => setSize(s), isResizingMode);
 
   const onContentChange = useCallback((evt: ContentEditableEvent) => {
     setContent(evt.currentTarget.innerHTML);
@@ -64,12 +71,12 @@ const Card = ({
       ref={elementRef}
       data-element-id={elementId}
       onClick={() => selectionEvents.publish(elementId)}
-      draggable={isSelected}
+      draggable={isSelected && !isResizingMode}
       onDragStart={handleDragStart}
       onDragEnd={() => elementRef.current?.classList.remove("hidden")}
       style={{
-        width: "300px",
-        height: "200px",
+        width: size.width + "px",
+        height: size.height + "px",
         left,
         top,
         zIndex,
@@ -80,6 +87,8 @@ const Card = ({
         elementRef={elementRef}
         isSelected={isSelected}
         zIndex={zIndex}
+        isResizingMode={isResizingMode}
+        toggleResizingMode={() => setIsResizingMode((v) => !v)}
       >
         <ContentEditable onChange={onContentChange} html={content} />
       </OptionsPanel>

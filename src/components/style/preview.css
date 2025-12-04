@@ -19,10 +19,44 @@
   height: 100%;
 }
 
+.options-panel-cont:not([data-selected="true"]) > * {
+  display: none;
+}
+
 .options-panel {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.resize-handle {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+
+  background-color: bisque;
+}
+
+.options-panel-cont:not([data-resizing="true"]) .resize-handle {
+  display: none;
+}
+
+.resize-handle.vertical{
+  cursor: ns-resize;
+  left: 50%;
+  bottom: -20px;
+}
+
+.resize-handle.both {
+  cursor: nwse-resize;
+  right: -20px;
+  bottom: -20px;
+}
+
+.resize-handle.horizontal {
+  cursor: ew-resize;
+  right: -20px;
+  top: 50%;
 }
 
 .hidden[draggable="true"] {

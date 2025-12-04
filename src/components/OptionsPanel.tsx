@@ -10,6 +10,9 @@ type OptionsPanelProps<T extends HTMLElement = HTMLElement> = {
   elementRef: RefObject<T | null>;
   isSelected: boolean;
   zIndex: number;
+  // optional props to control resizing mode from parent (Card)
+  isResizingMode?: boolean;
+  toggleResizingMode?: () => void;
 };
 
 const OptionsPanel = <T extends HTMLElement = HTMLElement>({
@@ -18,6 +21,8 @@ const OptionsPanel = <T extends HTMLElement = HTMLElement>({
   elementRef,
   isSelected,
   zIndex,
+  isResizingMode = false,
+  toggleResizingMode,
 }: OptionsPanelProps<T>) => {
   const { zIndexLimits, zIndexChange, deleteElement } = useContext(
     ElementOperationsContext
@@ -25,13 +30,13 @@ const OptionsPanel = <T extends HTMLElement = HTMLElement>({
   void elementRef;
 
   return (
-    <div className="options-panel-cont" style={{}}>
-      <div
-        className="options-panel"
-        style={{
-          visibility: isSelected ? "visible" : "hidden",
-        }}
-      >
+    <div
+      className="options-panel-cont"
+      data-selected={isSelected}
+      data-resizing={isResizingMode}
+      style={{}}
+    >
+      <div className="options-panel">
         <button
           disabled={zIndexLimits.bottom === zIndex}
           onClick={() => zIndexChange(elementId, -1)}
@@ -45,8 +50,20 @@ const OptionsPanel = <T extends HTMLElement = HTMLElement>({
           Front
         </button>
         <button onClick={() => deleteElement(elementId)}>Delete</button>
+        <button
+          onClick={(e) => {
+            // prevent clicks on this control from bubbling and re-selecting or dragging
+            e.stopPropagation();
+            toggleResizingMode?.();
+          }}
+        >
+          {isResizingMode ? "Stop Resize" : "Resize"}
+        </button>
       </div>
       {children}
+      <div className="resize-handle vertical"></div>
+      <div className="resize-handle both"></div>
+      <div className="resize-handle horizontal"></div>
     </div>
   );
 };
