@@ -3,18 +3,22 @@ import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
 
-import "./style/preview.css";
 import { selectionEvents } from "../utils/selectionPubSub";
+
 import OptionsPanel from "./OptionsPanel";
+
+import "./style/preview.css";
 
 const Card = ({
   elementId,
   left,
   top,
+  zIndex,
 }: {
   elementId: string | null;
   left: number | string;
   top: number | string;
+  zIndex: number;
 }) => {
   const [content, setContent] = useState("");
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -62,7 +66,7 @@ const Card = ({
       ref={elementRef}
       data-element-id={elementId}
       onClick={() => selectionEvents.publish(elementId)}
-      draggable={true}
+      draggable={isSelected}
       onDragStart={handleDragStart}
       onDragEnd={() => elementRef.current?.classList.remove("hidden")}
       style={{
@@ -70,12 +74,14 @@ const Card = ({
         height: "200px",
         left,
         top,
+        zIndex,
       }}
     >
       <OptionsPanel
         elementId={elementId}
         elementRef={elementRef}
         isSelected={isSelected}
+        zIndex={zIndex}
       >
         <ContentEditable onChange={onContentChange} html={content} />
       </OptionsPanel>

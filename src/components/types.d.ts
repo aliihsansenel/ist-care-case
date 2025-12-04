@@ -9,12 +9,13 @@ export type ElementData = {
   type: string;
   left: number | string;
   top: number | string;
+  zIndex: number;
 };
-
-export type DeleteElementContextType = {
-  deleteElement: (elementId: string | null) => void;
-};
-
-// export type ElementRefTypes =
 
 export type ElementDataArray = ElementData[];
+
+export type ElementOperationsContextType = {
+  zIndexLimits: { bottom: number; top: number };
+  deleteElement: (elementId: string | null) => void;
+  zIndexChange: (elementId: string | null, increment: number) => void;
+};

@@ -12,6 +12,7 @@ const ComponentSelector = ({
   type,
   left,
   top,
+  zIndex,
 }: ElementData): React.ReactElement => {
   switch (type) {
     case "header":
@@ -21,7 +22,9 @@ const ComponentSelector = ({
     case "text-content":
       return <TextContent key={id} elementId={id} />;
     case "card":
-      return <Card key={id} elementId={id} left={left} top={top} />;
+      return (
+        <Card key={id} elementId={id} left={left} top={top} zIndex={zIndex} />
+      );
     default:
       return <Header elementId={id} />;
   }

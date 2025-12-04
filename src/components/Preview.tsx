@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
-import type { ElementDataArray } from "./types";
-import { DeleteElementContext, GridContext } from "./contexts";
+import type { ElementData, ElementDataArray } from "./types";
+import { ElementOperationsContext, GridContext } from "./contexts";
 
 import ComponentSelector from "./ComponentSelector";
 
@@ -51,6 +51,8 @@ const Preview = () => {
         droppedComps.length === 0
           ? "0"
           : String(Number(droppedComps.at(-1)?.id) + 1);
+      const newZIndex =
+        droppedComps.length === 0 ? 0 : Number(droppedComps.at(-1)?.zIndex) + 1;
       setDroppedComps([
         ...droppedComps,
         {
@@ -58,13 +60,83 @@ const Preview = () => {
           type: elementData.type,
           left,
           top,
+          zIndex: newZIndex,
         },
       ]);
     }
   };
 
+  const zIndexChange = (elementId: ElementData["id"], increment: number) => {
+    setDroppedComps((prev) => {
+      // Not cloning prev state causing missing renders.
+      const arr = [...prev];
+      const idx = arr.findIndex((e) => e.id === elementId);
+      if (idx === -1) return prev;
+
+      const current = { ...arr[idx] };
+      const curZ = current.zIndex;
+
+      let candidateIndex = -1;
+
+      if (increment === 1) {
+        // find element with smallest zIndex > curZ
+        let minGreater = Infinity;
+        arr.forEach((e, i) => {
+          if (e.zIndex > curZ && e.zIndex < minGreater) {
+            minGreater = e.zIndex;
+            candidateIndex = i;
+          }
+        });
+      } else if (increment === -1) {
+        // find element with largest zIndex < curZ
+        let maxSmaller = -Infinity;
+        arr.forEach((e, i) => {
+          if (e.zIndex < curZ && e.zIndex > maxSmaller) {
+            maxSmaller = e.zIndex;
+            candidateIndex = i;
+          }
+        });
+      } else {
+        return prev;
+      }
+
+      if (candidateIndex === -1) return prev;
+
+      const target = { ...arr[candidateIndex] };
+
+      // swap zIndex
+      const tmpZ = current.zIndex;
+      current.zIndex = target.zIndex;
+      target.zIndex = tmpZ;
+
+      arr[idx] = current;
+      arr[candidateIndex] = target;
+
+      return arr;
+    });
+  };
+
+  const zIndexLimits = (() => {
+    if (droppedComps.length === 0) {
+      return { bottom: 0, top: 0 };
+    }
+
+    let minZ = Infinity;
+    let maxZ = -Infinity;
+
+    for (const e of droppedComps) {
+      const z = Number(e.zIndex);
+      if (z < minZ) minZ = z;
+      if (z > maxZ) maxZ = z;
+    }
+
+    return { bottom: minZ, top: maxZ };
+  })();
+
   return (
-    <DeleteElementContext.Provider value={{ deleteElement }}>
+    <ElementOperationsContext.Provider
+      value={{ zIndexLimits, zIndexChange, deleteElement }}
+    >
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
@@ -73,7 +145,7 @@ const Preview = () => {
       >
         {droppedComps.map((data) => ComponentSelector(data))}
       </div>
-    </DeleteElementContext.Provider>
+    </ElementOperationsContext.Provider>
   );
 };
 
