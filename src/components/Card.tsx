@@ -43,9 +43,7 @@ const Card = ({
   const handleDragStart = (e: React.DragEvent) => {
     if (elementRef.current) {
       elementRef.current?.classList.add("hidden");
-      const preview: HTMLElement = document.getElementById("preview")!;
       const pos = { x: e.clientX, y: e.clientY };
-      const previewRect = preview.getBoundingClientRect();
       const selfRect = elementRef.current.getBoundingClientRect()!;
 
       e.dataTransfer.setData(
@@ -53,8 +51,8 @@ const Card = ({
         JSON.stringify({
           elementId,
           type: "card",
-          offsetX: previewRect.left - pos.x + selfRect.left,
-          offsetY: previewRect.top - pos.y + selfRect.top,
+          offsetX: -pos.x + selfRect.left,
+          offsetY: -pos.y + selfRect.top,
         })
       );
     }

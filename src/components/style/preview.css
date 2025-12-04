@@ -25,7 +25,7 @@
   right: 0;
 }
 
-.hidden {
-  /* visibility or display property changes does not work. */
+.hidden[draggable="true"] {
+  /* neither visibility nor display property ensure wanted effect. */
   opacity: 0.01;
 }
