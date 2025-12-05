@@ -11,6 +11,7 @@ function Sidebar() {
         <DraggableItem type="footer" />
         <DraggableItem type="text-content" />
         <DraggableItem type="card" />
+        <DraggableItem type="slider" />
       </div>
     </aside>
   );
