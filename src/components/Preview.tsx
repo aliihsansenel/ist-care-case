@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 
 import type { ElementData, ElementDataArray } from "./types";
 import { ElementOperationsContext, GridContext } from "./contexts";
@@ -12,8 +12,27 @@ const Preview = () => {
 
   const [droppedComps, setDroppedComps] = React.useState<ElementDataArray>([]);
 
+  const elementRef = useRef<HTMLDivElement | null>(null);
+
   const deleteElement = (elementId: string | null) => {
     setDroppedComps((comps) => comps.filter((comp) => comp.id !== elementId));
+  };
+
+  const handleDragEnter = () => {
+    elementRef.current?.classList.add("drag-enter");
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    const rect = elementRef.current!.getBoundingClientRect();
+
+    const inside =
+      e.clientX < rect.right &&
+      e.clientX > rect.left &&
+      e.clientY > rect.top &&
+      e.clientY < rect.bottom;
+    if (!inside) {
+      elementRef.current?.classList.remove("drag-enter");
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -28,6 +47,8 @@ const Preview = () => {
     const rect = preview.getBoundingClientRect();
 
     let left: number | string, top: number | string;
+
+    elementRef.current?.classList.remove("drag-enter");
 
     if (elementData.elementId !== undefined && elementData.elementId !== null) {
       // TODO grid enabled scenario
@@ -138,6 +159,9 @@ const Preview = () => {
       value={{ zIndexLimits, zIndexChange, deleteElement }}
     >
       <div
+        ref={elementRef}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         id="preview"

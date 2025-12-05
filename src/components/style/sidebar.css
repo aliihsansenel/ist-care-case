@@ -4,6 +4,10 @@
   padding: 2em;
 }
 
+.draggable-item {
+  cursor: grab;
+}
+
 .sidebar .comps-title {
   text-transform: uppercase;
 }

@@ -5,6 +5,22 @@
   background-color: #dbdbdb;
 }
 
+#preview.drag-enter {
+  background-color: #abbdcf; /* #1976d2, #2979ff, #1565c0*/
+  border: 3px dashed #a2c4fd;
+  box-shadow: 0 0 10px #5d8abd, 0 0 40px #42a5f5 inset;
+  transition: background-color 0.15s, border-color 0.15s, box-shadow 0.2s;
+}
+
+#preview > .dragging-over {
+  border: none;
+  background-color: red;
+}
+
+#preview > .dragging-over * {
+  display: none;
+}
+
 .card {
   position: absolute;
 

@@ -32,6 +32,15 @@ const Card = ({
   // pass isResizingMode to the hook so it only starts resizing when mode is enabled.
   useResizable(elementRef, (s) => setSize(s), isResizingMode);
 
+  const handleDragEnter = () => {
+    if (!elementRef.current?.classList.contains("hidden"))
+      elementRef.current?.classList.add("dragging-over");
+  };
+  const handleDragLeave = (e: React.DragEvent) => {
+    if (e.target === elementRef.current)
+      elementRef.current?.classList.remove("dragging-over");
+  };
+
   const onContentChange = useCallback((evt: ContentEditableEvent) => {
     setContent(evt.currentTarget.innerHTML);
   }, []);
@@ -69,6 +78,8 @@ const Card = ({
     <div
       className="card"
       ref={elementRef}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
       data-element-id={elementId}
       onClick={() => selectionEvents.publish(elementId)}
       draggable={isSelected && !isResizingMode}
