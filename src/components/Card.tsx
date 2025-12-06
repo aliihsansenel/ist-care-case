@@ -5,11 +5,11 @@ import ContentEditable, {
 
 import { selectionEvents } from "../utils/selectionPubSub";
 import { overlapDetector } from "../utils/overlapDetector";
+import { useResizable } from "../hooks/useResizable";
 
 import OptionsPanel from "./OptionsPanel";
 
 import "./style/preview.css";
-import { useResizable } from "../hooks/useResizable";
 
 const Card = ({
   elementId,
@@ -117,6 +117,16 @@ const Card = ({
         zIndex={zIndex}
         isResizingMode={isResizingMode}
         toggleResizingMode={() => setIsResizingMode((v) => !v)}
+        allowedHandles={[
+          "top-left",
+          "top",
+          "top-right",
+          "right",
+          "bottom-right",
+          "bottom",
+          "bottom-left",
+          "left",
+        ]}
       >
         <ContentEditable onChange={onContentChange} html={content} />
       </OptionsPanel>

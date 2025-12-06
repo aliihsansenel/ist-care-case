@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import OptionsPanel from "./OptionsPanel";
+
 import { selectionEvents } from "../utils/selectionPubSub";
 import { useResizable } from "../hooks/useResizable";
+
+import OptionsPanel from "./OptionsPanel";
 
 const Header = ({
   elementId,
@@ -49,6 +51,7 @@ const Header = ({
         zIndex={zIndex}
         isResizingMode={isResizingMode}
         toggleResizingMode={() => setIsResizingMode((v) => !v)}
+        allowedHandles={["bottom"]}
       >
         Header
       </OptionsPanel>

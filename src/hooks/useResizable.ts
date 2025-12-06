@@ -1,4 +1,5 @@
 import { useRef, useEffect, type RefObject } from "react";
+
 import { overlapDetector } from "../utils/overlapDetector";
 
 interface Size {
@@ -7,16 +8,12 @@ interface Size {
 }
 
 /**
- * Attaches pointer handlers to existing .resize-handle elements inside the given elementRef.
- * Live resizing manipulates the element's inline width/height (no React state during drag).
- * When the gesture ends, onCommit is called with final size (so React state can be updated).
+ * Extended resizer:
+ * - Supports directional handles: left, right, top, bottom and the 4 corners (top-left, top-right, bottom-left, bottom-right)
+ * - Preserves original behaviour for "horizontal", "vertical", and "both" (both behaves like bottom-right with aspect ratio preservation)
  *
- * The hook is passive by default; the caller can pass `isActive` to enable resizing behavior.
- *
- * Handles should exist in DOM and have class names:
- *   - "resize-handle horizontal"  -> resize width only
- *   - "resize-handle vertical"    -> resize height only
- *   - "resize-handle both"        -> resize while preserving aspect ratio (based on start size)
+ * Note: onCommit still only returns final size (width/height) to keep the original contract.
+ * The hook will manipulate inline left/top during drag so the element visually moves when resizing from left/top.
  */
 export function useResizable(
   elementRef: RefObject<HTMLElement | null>,
@@ -27,7 +24,24 @@ export function useResizable(
   const startY = useRef(0);
   const startW = useRef(0);
   const startH = useRef(0);
-  const handleType = useRef<"vertical" | "horizontal" | "both" | null>(null);
+  const startLeft = useRef(0);
+  const startTop = useRef(0);
+
+  const handleType = useRef<
+    | "vertical"
+    | "horizontal"
+    | "both"
+    | "left"
+    | "right"
+    | "top"
+    | "bottom"
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right"
+    | null
+  >(null);
+
   const aspectRatio = useRef(1);
 
   const onMove = (e: PointerEvent) => {
@@ -38,24 +52,82 @@ export function useResizable(
     const dx = e.clientX - startX.current;
     const dy = e.clientY - startY.current;
 
+    const minSize = 20;
+
     let newW = startW.current;
     let newH = startH.current;
+    let newLeft = startLeft.current;
+    let newTop = startTop.current;
 
-    if (handleType.current === "horizontal") {
-      newW = Math.max(20, Math.round(startW.current + dx));
-      // height unchanged
-    } else if (handleType.current === "vertical") {
-      newH = Math.max(20, Math.round(startH.current + dy));
-      // width unchanged
-    } else if (handleType.current === "both") {
-      // preserve aspect ratio based on horizontal movement (dx)
-      const tentativeW = Math.max(20, Math.round(startW.current + dx));
-      newW = tentativeW;
-      newH = Math.max(20, Math.round(tentativeW / aspectRatio.current));
+    switch (handleType.current) {
+      case "horizontal":
+      case "right":
+        newW = Math.max(minSize, Math.round(startW.current + dx));
+        break;
+
+      case "left":
+        // dragging left handle: width decreases when moving right (dx>0)
+        newW = Math.max(minSize, Math.round(startW.current - dx));
+        newLeft = Math.round(startLeft.current + dx);
+        break;
+
+      case "vertical":
+      case "bottom":
+        newH = Math.max(minSize, Math.round(startH.current + dy));
+        break;
+
+      case "top":
+        newH = Math.max(minSize, Math.round(startH.current - dy));
+        newTop = Math.round(startTop.current + dy);
+        break;
+
+      case "both":
+      case "bottom-right":
+        // preserve aspect ratio using horizontal movement (legacy behaviour)
+        {
+          const tentativeW = Math.max(minSize, Math.round(startW.current + dx));
+          newW = tentativeW;
+          newH = Math.max(
+            minSize,
+            Math.round(tentativeW / aspectRatio.current)
+          );
+        }
+        break;
+
+      case "top-left":
+        newW = Math.max(minSize, Math.round(startW.current - dx));
+        newH = Math.max(minSize, Math.round(startH.current - dy));
+        newLeft = Math.round(startLeft.current + dx);
+        newTop = Math.round(startTop.current + dy);
+        break;
+
+      case "top-right":
+        newW = Math.max(minSize, Math.round(startW.current + dx));
+        newH = Math.max(minSize, Math.round(startH.current - dy));
+        newTop = Math.round(startTop.current + dy);
+        break;
+
+      case "bottom-left":
+        newW = Math.max(minSize, Math.round(startW.current - dx));
+        newH = Math.max(minSize, Math.round(startH.current + dy));
+        newLeft = Math.round(startLeft.current + dx);
+        break;
+
+      default:
+        break;
     }
 
+    // apply inline styles (width/height and if needed, left/top)
     el.style.width = newW + "px";
     el.style.height = newH + "px";
+    // update positional styles only when they changed (so anchored corners work)
+    if (newLeft !== startLeft.current) {
+      el.style.left = newLeft + "px";
+    }
+    if (newTop !== startTop.current) {
+      el.style.top = newTop + "px";
+    }
+
     // overlap detection during resizing (highlight static overlapping elements)
     overlapDetector.onResizeMoveRect(el.getBoundingClientRect());
   };
@@ -84,12 +156,29 @@ export function useResizable(
     const el = elementRef.current;
     if (!el || !target) return;
 
-    // determine handle type from classes
-    if (target.classList.contains("horizontal")) {
+    // determine handle type from classes - support both legacy class names
+    const cls = target.classList;
+    if (cls.contains("left")) {
+      handleType.current = "left";
+    } else if (cls.contains("right")) {
+      handleType.current = "right";
+    } else if (cls.contains("top")) {
+      handleType.current = "top";
+    } else if (cls.contains("bottom")) {
+      handleType.current = "bottom";
+    } else if (cls.contains("top-left")) {
+      handleType.current = "top-left";
+    } else if (cls.contains("top-right")) {
+      handleType.current = "top-right";
+    } else if (cls.contains("bottom-left")) {
+      handleType.current = "bottom-left";
+    } else if (cls.contains("bottom-right")) {
+      handleType.current = "bottom-right";
+    } else if (cls.contains("horizontal")) {
       handleType.current = "horizontal";
-    } else if (target.classList.contains("vertical")) {
+    } else if (cls.contains("vertical")) {
       handleType.current = "vertical";
-    } else if (target.classList.contains("both")) {
+    } else if (cls.contains("both")) {
       handleType.current = "both";
     } else {
       handleType.current = null;
@@ -106,6 +195,11 @@ export function useResizable(
     startY.current = e.clientY;
     startW.current = el.offsetWidth;
     startH.current = el.offsetHeight;
+
+    // store starting position relative to offsetParent (used when resizing from left/top)
+    startLeft.current = el.offsetLeft;
+    startTop.current = el.offsetTop;
+
     aspectRatio.current = Math.max(
       1e-6,
       startW.current / Math.max(1, startH.current)

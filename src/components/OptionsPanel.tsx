@@ -13,7 +13,12 @@ type OptionsPanelProps<T extends HTMLElement = HTMLElement> = {
   // optional props to control resizing mode from parent (Card)
   isResizingMode?: boolean;
   toggleResizingMode?: () => void;
+  // allowedHandles: list of handle identifiers to render for this element
+  // valid values: "left","right","top","bottom","top-left","top-right","bottom-left","bottom-right","horizontal","vertical","both"
+  allowedHandles?: string[];
 };
+
+const DEFAULT_HANDLES = ["vertical", "both", "horizontal"];
 
 const OptionsPanel = <T extends HTMLElement = HTMLElement>({
   children,
@@ -23,11 +28,21 @@ const OptionsPanel = <T extends HTMLElement = HTMLElement>({
   zIndex,
   isResizingMode = false,
   toggleResizingMode,
+  allowedHandles = DEFAULT_HANDLES,
 }: OptionsPanelProps<T>) => {
   const { zIndexLimits, zIndexChange, deleteElement } = useContext(
     ElementOperationsContext
   );
   void elementRef;
+
+  const renderHandle = (h: string) => {
+    // maintain backward-compatible "both" class for bottom-right semantics
+    const className =
+      h === "bottom-right"
+        ? "resize-handle both bottom-right"
+        : `resize-handle ${h}`;
+    return <div key={h} className={className} data-handle={h} />;
+  };
 
   return (
     <div
@@ -61,9 +76,7 @@ const OptionsPanel = <T extends HTMLElement = HTMLElement>({
         </button>
       </div>
       {children}
-      <div className="resize-handle vertical"></div>
-      <div className="resize-handle both"></div>
-      <div className="resize-handle horizontal"></div>
+      {allowedHandles.map((h) => renderHandle(h))}
     </div>
   );
 };
