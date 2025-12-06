@@ -4,6 +4,7 @@ import ContentEditable, {
 } from "react-contenteditable";
 
 import { selectionEvents } from "../utils/selectionPubSub";
+import { overlapDetector } from "../utils/overlapDetector";
 
 import OptionsPanel from "./OptionsPanel";
 
@@ -58,19 +59,32 @@ const Card = ({
 
   const handleDragStart = (e: React.DragEvent) => {
     if (elementRef.current) {
-      elementRef.current?.classList.add("hidden");
+      elementRef.current.classList.add("hidden");
       const pos = { x: e.clientX, y: e.clientY };
-      const selfRect = elementRef.current.getBoundingClientRect()!;
+      const selfRect = elementRef.current.getBoundingClientRect();
+      const offsetX = -pos.x + selfRect.left;
+      const offsetY = -pos.y + selfRect.top;
 
       e.dataTransfer.setData(
         "elementData",
         JSON.stringify({
           elementId,
           type: "card",
-          offsetX: -pos.x + selfRect.left,
-          offsetY: -pos.y + selfRect.top,
+          offsetX,
+          offsetY,
         })
       );
+
+      const preview = document.getElementById("preview") as HTMLElement | null;
+      if (preview) {
+        overlapDetector.beginDragExisting(preview, {
+          element: elementRef.current,
+          offsetX,
+          offsetY,
+          width: elementRef.current.offsetWidth,
+          height: elementRef.current.offsetHeight,
+        });
+      }
     }
   };
 
@@ -84,7 +98,10 @@ const Card = ({
       onClick={() => selectionEvents.publish(elementId)}
       draggable={isSelected && !isResizingMode}
       onDragStart={handleDragStart}
-      onDragEnd={() => elementRef.current?.classList.remove("hidden")}
+      onDragEnd={() => {
+        elementRef.current?.classList.remove("hidden");
+        overlapDetector.end();
+      }}
       style={{
         width: size.width + "px",
         height: size.height + "px",

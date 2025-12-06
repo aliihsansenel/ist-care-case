@@ -5,6 +5,8 @@ import { ElementOperationsContext, GridContext } from "./contexts";
 
 import ComponentSelector from "./ComponentSelector";
 
+import { overlapDetector } from "../utils/overlapDetector";
+
 import "./style/preview.css";
 
 const Preview = () => {
@@ -32,11 +34,16 @@ const Preview = () => {
       e.clientY < rect.bottom;
     if (!inside) {
       elementRef.current?.classList.remove("drag-enter");
+      overlapDetector.clearHighlights();
     }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
+    overlapDetector.onDragOver(e.clientX, e.clientY);
+    if (overlapDetector.hasBlockingOverlap()) {
+      e.dataTransfer.dropEffect = "none";
+    }
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -49,6 +56,12 @@ const Preview = () => {
     let left: number | string, top: number | string;
 
     elementRef.current?.classList.remove("drag-enter");
+
+    // prevent drop if overlapping another element
+    if (overlapDetector.hasBlockingOverlap()) {
+      overlapDetector.end();
+      return;
+    }
 
     if (elementData.elementId !== undefined && elementData.elementId !== null) {
       // TODO grid enabled scenario
@@ -85,6 +98,8 @@ const Preview = () => {
         },
       ]);
     }
+
+    overlapDetector.end();
   };
 
   const zIndexChange = (elementId: ElementData["id"], increment: number) => {

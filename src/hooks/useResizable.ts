@@ -1,4 +1,5 @@
 import { useRef, useEffect, type RefObject } from "react";
+import { overlapDetector } from "../utils/overlapDetector";
 
 interface Size {
   width: number;
@@ -55,6 +56,8 @@ export function useResizable(
 
     el.style.width = newW + "px";
     el.style.height = newH + "px";
+    // overlap detection during resizing (highlight static overlapping elements)
+    overlapDetector.onResizeMoveRect(el.getBoundingClientRect());
   };
 
   const onUp = () => {
@@ -65,6 +68,9 @@ export function useResizable(
         height: el.offsetHeight,
       });
     }
+    // end overlap highlighting when resize ends
+    overlapDetector.end();
+
     window.removeEventListener("pointermove", onMove);
     window.removeEventListener("pointerup", onUp);
   };
@@ -88,6 +94,12 @@ export function useResizable(
     } else {
       handleType.current = null;
       return;
+    }
+
+    // initialize overlap detection for resize against other children in #preview
+    const preview = document.getElementById("preview") as HTMLElement | null;
+    if (preview) {
+      overlapDetector.beginResize(preview, el);
     }
 
     startX.current = e.clientX;
