@@ -76,6 +76,14 @@
   top: 50%;
 }
 
+.header .resize-handle.both {
+  display: none;
+}
+
+.header .resize-handle.horizontal {
+  display: none;
+}
+
 .hidden[draggable="true"] {
   /* neither visibility nor display property ensure wanted effect. */
   opacity: 0.01;
