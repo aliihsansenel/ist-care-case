@@ -17,7 +17,7 @@ const ComponentSelector = ({
 }: ElementData): React.ReactElement => {
   switch (type) {
     case "header":
-      return <Header key={id} elementId={id} />;
+      return <Header key={id} elementId={id} zIndex={zIndex} />;
     case "footer":
       return <Footer key={id} elementId={id} />;
     case "text-content":
@@ -29,7 +29,9 @@ const ComponentSelector = ({
     case "slider":
       return <Slider key={id} elementId={id} />;
     default:
-      return <Header elementId={id} />;
+      return (
+        <Card key={id} elementId={id} left={left} top={top} zIndex={zIndex} />
+      );
   }
 };
 

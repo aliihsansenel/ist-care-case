@@ -1,11 +1,41 @@
 .sidebar {
-  background-color: #ccc;
+  background-color: #62b6cb;
 
   padding: 2em;
 }
 
 .draggable-item {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.4em;
+
+  padding: 1.2em 1em;
+  border-radius: 1em;
+  
+  background-color: #023e8a;
   cursor: grab;
+  color: #88cfdb;
+}
+
+.draggable-item:hover {
+  background-color: #001845;
+}
+
+
+.draggable-item.is-dragging {
+  opacity: 0.5;
+}
+
+.draggable-item .title {
+  margin-top: 0.3em;
+  font-size: 1.1em;
+  font-weight: 800;
+  
+  color: #90e0ef;
+}
+
+.draggable-item .desc {
+  font-size: 0.9em;
 }
 
 .sidebar .comps-title {
@@ -15,4 +45,6 @@
 .sidebar .comps-cont {
   display: flex;
   flex-direction: column;
+
+  row-gap: 1.2em;
 }

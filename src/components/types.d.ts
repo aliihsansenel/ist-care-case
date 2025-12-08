@@ -1,12 +1,27 @@
+import type { LucideIcon } from "lucide-react";
+
 export type GridType = {
   enabled: boolean;
   size: number;
   snap: boolean;
 };
 
+export type DraggableType =
+  | "header"
+  | "footer"
+  | "text-content"
+  | "card"
+  | "slider";
+
+export interface DraggableItemInfo {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
 export type ElementData = {
   id: string | null;
-  type: string;
+  type: DraggableType;
   left: number | string;
   top: number | string;
   zIndex: number;
