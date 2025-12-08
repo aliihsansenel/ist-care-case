@@ -44,15 +44,45 @@
   position: absolute;
   top: 0;
   right: 0;
+
+  display: flex;
+  column-gap: 0.5em;
+  padding: 0.5em;
+
+  border-radius: 5px;
+  background-color: #2e4560;
+}
+
+
+.options-panel button{
+  border-radius: 5px;
+  padding: 8px 8px 5px 8px;
+
+  border: none;
+}
+
+.options-panel .delete-button {
+  
+  background-color: red;
+}
+
+.options-panel .z-index-button {
+  background-color: rgb(40, 84, 229);
+  color: white;
+}
+
+.options-panel .z-index-button:disabled {
+  background-color: rgb(23, 50, 140);
+  color: rgb(156, 156, 156);
 }
 
 /* Base handle */
 .resize-handle {
   position: absolute;
-  width: 15px;
-  height: 15px;
+  width: 30px;
+  height: 30px;
 
-  background-color: bisque;
+  /* background-color: bisque; */
   z-index: 1000;
   /* make sure handles are centered visually when using left/top/50% coords */
   box-sizing: border-box;
@@ -83,14 +113,15 @@
 .resize-handle.both,
 .resize-handle.bottom-right {
   cursor: nwse-resize;
-  right: -20px;
-  bottom: -20px;
+  right: -15px;
+  bottom: -15px;
 }
 
 /* left (center left) */
 .resize-handle.left {
   cursor: ew-resize;
-  left: -25px;
+  left: -15px;
+  height: calc(100% - 60px);
   top: 50%;
   transform: translateY(-50%);
 }
@@ -98,8 +129,9 @@
 /* right (center right) - kept for explicitness */
 .resize-handle.right {
   cursor: ew-resize;
-  right: -25px;
-  top: 50%;
+  right: -15px;
+  height: calc(100% - 110px);
+  top: calc(50% + 10px);
   transform: translateY(-50%);
 }
 
@@ -107,7 +139,8 @@
 .resize-handle.top {
   cursor: ns-resize;
   left: 50%;
-  top: -25px;
+  width: 70%;
+  top: -15px;
   transform: translateX(-50%);
 }
 
@@ -115,7 +148,9 @@
 .resize-handle.bottom {
   cursor: ns-resize;
   left: 50%;
-  bottom: -25px;
+  width: 80%;
+  bottom: -15px;
+  height: 30px;
   transform: translateX(-50%);
 }
 
@@ -137,8 +172,8 @@
 /* bottom-left */
 .resize-handle.bottom-left {
   cursor: nesw-resize;
-  left: -20px;
-  bottom: -20px;
+  left: -15px;
+  bottom: -15px;
 }
 
 .hidden[draggable="true"] {

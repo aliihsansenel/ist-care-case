@@ -3,6 +3,7 @@ import { useContext, type RefObject } from "react";
 import { ElementOperationsContext } from "./contexts";
 
 import "./style/preview.css";
+import { ArrowDown, ArrowUp, Scaling, Trash2 } from "lucide-react";
 
 type OptionsPanelProps<T extends HTMLElement = HTMLElement> = {
   children: React.ReactNode;
@@ -52,19 +53,30 @@ const OptionsPanel = <T extends HTMLElement = HTMLElement>({
       style={{}}
     >
       <div className="options-panel">
-        <button
-          disabled={zIndexLimits.bottom === zIndex}
-          onClick={() => zIndexChange(elementId, -1)}
-        >
-          Back
-        </button>
-        <button
-          disabled={zIndexLimits.top === zIndex}
-          onClick={() => zIndexChange(elementId, 1)}
-        >
-          Front
-        </button>
-        <button onClick={() => deleteElement(elementId)}>Delete</button>
+        {isResizingMode || (
+          <>
+            <button
+              className="z-index-button"
+              disabled={zIndexLimits.bottom === zIndex}
+              onClick={() => zIndexChange(elementId, -1)}
+            >
+              <ArrowDown />
+            </button>
+            <button
+              className="z-index-button"
+              disabled={zIndexLimits.top === zIndex}
+              onClick={() => zIndexChange(elementId, 1)}
+            >
+              <ArrowUp />
+            </button>
+            <button
+              className="delete-button"
+              onClick={() => deleteElement(elementId)}
+            >
+              <Trash2 color="white" />
+            </button>
+          </>
+        )}
         <button
           onClick={(e) => {
             // prevent clicks on this control from bubbling and re-selecting or dragging
@@ -72,7 +84,7 @@ const OptionsPanel = <T extends HTMLElement = HTMLElement>({
             toggleResizingMode?.();
           }}
         >
-          {isResizingMode ? "Stop Resize" : "Resize"}
+          <Scaling color={isResizingMode ? "green" : "#e7661b"} />
         </button>
       </div>
       {children}
