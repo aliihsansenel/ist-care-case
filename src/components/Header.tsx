@@ -7,10 +7,14 @@ import OptionsPanel from "./OptionsPanel";
 
 const Header = ({
   elementId,
-  zIndex,
+  zIndex = 0,
+  left,
+  top,
 }: {
   elementId: string | null;
-  zIndex: number;
+  zIndex?: number;
+  left?: number | string;
+  top?: number | string;
 }) => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [isResizingMode, setIsResizingMode] = useState<boolean>(false);
@@ -38,10 +42,12 @@ const Header = ({
       onClick={() => selectionEvents.publish(elementId)}
       style={{
         border: "2px solid black",
-        position: "sticky",
+        position: "absolute",
         width: "100%",
         height: size.height + "px",
-        top: 0,
+        left: left ?? 0,
+        top: top ?? 0,
+        zIndex,
       }}
     >
       <OptionsPanel

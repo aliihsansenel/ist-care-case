@@ -5,12 +5,22 @@ import { useResizable } from "../hooks/useResizable";
 
 import OptionsPanel from "./OptionsPanel";
 
-const Footer = ({ elementId }: { elementId: string | null }) => {
+const Footer = ({
+  elementId,
+  zIndex = 0,
+  left,
+  top,
+}: {
+  elementId: string | null;
+  zIndex?: number;
+  left?: number | string;
+  top?: number | string;
+}) => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [isResizingMode, setIsResizingMode] = useState<boolean>(false);
   const [size, setSize] = useState({ width: 0, height: 60 });
 
-  const elementRef = useRef<HTMLElement | null>(null);
+  const elementRef = useRef<HTMLDivElement | null>(null);
 
   useResizable(elementRef, (s) => setSize(s), isResizingMode);
 
@@ -35,14 +45,17 @@ const Footer = ({ elementId }: { elementId: string | null }) => {
         position: "absolute",
         width: "100%",
         height: size.height + "px",
-        bottom: 0,
+        left: left ?? 0,
+        top: top ?? undefined,
+        bottom: top ? undefined : 0,
+        zIndex,
       }}
     >
       <OptionsPanel
         elementId={elementId}
         elementRef={elementRef}
         isSelected={isSelected}
-        zIndex={0}
+        zIndex={zIndex}
         isResizingMode={isResizingMode}
         toggleResizingMode={() => setIsResizingMode((v) => !v)}
         allowedHandles={["top"]}

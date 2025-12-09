@@ -11,7 +11,7 @@ import "./style/preview.css";
 
 const Preview = () => {
   const {
-    grid: { enabled: gridEnabled },
+    grid: { enabled: gridEnabled, size: gridCount, snap: gridSnap },
   } = useContext(GridContext);
 
   const [droppedComps, setDroppedComps] = React.useState<ElementDataArray>([]);
@@ -54,6 +54,7 @@ const Preview = () => {
 
     const pos = { x: e.clientX, y: e.clientY };
     const rect = preview.getBoundingClientRect();
+    const gridSize = preview.clientWidth / gridCount;
 
     let left: number | string, top: number | string;
 
@@ -65,23 +66,46 @@ const Preview = () => {
       return;
     }
 
+    const isFullWidthType = (type: string | undefined | null) =>
+      !!type && ["header", "footer", "slider", "text-content"].includes(type);
+
     if (elementData.elementId !== undefined && elementData.elementId !== null) {
-      // TODO grid enabled scenario
-      left = `${((pos.x - rect.left + elementData.offsetX) / rect.width) * 100.0}%`;
-      top = pos.y - rect.top + elementData.offsetY;
+      const rawLeftPx = pos.x - rect.left + (elementData.offsetX ?? 0);
+      const rawTopPx = pos.y - rect.top + (elementData.offsetY ?? 0);
+
+      if (gridEnabled && gridSnap) {
+        if (isFullWidthType(elementData.type)) {
+          left = 0;
+        } else {
+          left = Math.round(rawLeftPx / gridSize) * gridSize;
+        }
+        top = rawTopPx;
+      } else {
+        left = `${((pos.x - rect.left + elementData.offsetX) / rect.width) * 100.0}%`;
+        top = rawTopPx;
+      }
+
       setDroppedComps((comps) =>
         comps.map((comp) =>
           comp.id === elementData.elementId ? { ...comp, left, top } : comp
         )
       );
     } else {
-      if (!gridEnabled) {
-        left = `${((pos.x - rect.left) / rect.width) * 100.0}%`;
-        top = pos.y - rect.top;
+      const rawLeftPx = pos.x - rect.left;
+      const rawTopPx = pos.y - rect.top;
+
+      if (!gridEnabled || !gridSnap) {
+        left = `${(rawLeftPx / rect.width) * 100.0}%`;
+        top = rawTopPx;
       } else {
-        left = 0;
-        top = 0;
+        if (isFullWidthType(elementData.type)) {
+          left = 0;
+        } else {
+          left = Math.round(rawLeftPx / gridSize) * gridSize;
+        }
+        top = rawTopPx;
       }
+
       // TODO temporary id management for new item
       const newId =
         droppedComps.length === 0

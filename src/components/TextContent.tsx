@@ -3,7 +3,17 @@ import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
 
-const TextContent = ({ elementId }: { elementId: string | null }) => {
+const TextContent = ({
+  elementId,
+  left,
+  top,
+  zIndex,
+}: {
+  elementId: string | null;
+  left?: number | string;
+  top?: number | string;
+  zIndex?: number;
+}) => {
   const [content, setContent] = useState("");
 
   const onContentChange = React.useCallback((evt: ContentEditableEvent) => {
@@ -15,8 +25,12 @@ const TextContent = ({ elementId }: { elementId: string | null }) => {
       data-element-id={elementId}
       style={{
         border: "2px solid black",
+        position: "absolute",
         width: "100%",
         height: "auto",
+        left: left ?? undefined,
+        top: top ?? undefined,
+        zIndex,
       }}
       onChange={onContentChange}
       onBlur={onContentChange}

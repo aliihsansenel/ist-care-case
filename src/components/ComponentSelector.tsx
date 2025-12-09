@@ -17,17 +17,31 @@ const ComponentSelector = ({
 }: ElementData): React.ReactElement => {
   switch (type) {
     case "header":
-      return <Header key={id} elementId={id} zIndex={zIndex} />;
+      return (
+        <Header key={id} elementId={id} zIndex={zIndex} left={left} top={top} />
+      );
     case "footer":
-      return <Footer key={id} elementId={id} />;
+      return (
+        <Footer key={id} elementId={id} zIndex={zIndex} left={left} top={top} />
+      );
     case "text-content":
-      return <TextContent key={id} elementId={id} />;
+      return (
+        <TextContent
+          key={id}
+          elementId={id}
+          left={left}
+          top={top}
+          zIndex={zIndex}
+        />
+      );
     case "card":
       return (
         <Card key={id} elementId={id} left={left} top={top} zIndex={zIndex} />
       );
     case "slider":
-      return <Slider key={id} elementId={id} />;
+      return (
+        <Slider key={id} elementId={id} left={left} top={top} zIndex={zIndex} />
+      );
     default:
       return (
         <Card key={id} elementId={id} left={left} top={top} zIndex={zIndex} />
