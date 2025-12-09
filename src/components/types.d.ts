@@ -1,9 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 
 export type GridType = {
-  enabled: boolean;
-  size: number;
-  snap: boolean;
+  grid: { enabled: boolean; size: number; snap: boolean };
+  setGrid: Dispatch<SetStateAction<GridType>>;
 };
 
 export type DraggableType =

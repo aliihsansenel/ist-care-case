@@ -10,7 +10,9 @@ import { overlapDetector } from "../utils/overlapDetector";
 import "./style/preview.css";
 
 const Preview = () => {
-  const { enabled: gridEnabled } = useContext(GridContext);
+  const {
+    grid: { enabled: gridEnabled },
+  } = useContext(GridContext);
 
   const [droppedComps, setDroppedComps] = React.useState<ElementDataArray>([]);
 

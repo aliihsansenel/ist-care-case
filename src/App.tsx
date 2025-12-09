@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { GridContext, initialGridValues } from "./components/contexts";
-import type { GridType } from "./components/types";
 
 import PreviewArea from "./components/PreviewContainer";
 import Sidebar from "./components/Sidebar";
@@ -9,13 +8,11 @@ import Sidebar from "./components/Sidebar";
 import "./App.css";
 
 function App() {
-  const [grid, setGrid] = useState<GridType>(initialGridValues);
-
-  void setGrid;
+  const [grid, setGrid] = useState(initialGridValues.grid);
 
   return (
-    <div className={"app"}>
-      <GridContext.Provider value={grid}>
+    <div className="app">
+      <GridContext.Provider value={{ grid, setGrid }}>
         <PreviewArea />
         <Sidebar />
       </GridContext.Provider>

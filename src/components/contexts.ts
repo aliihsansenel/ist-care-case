@@ -3,9 +3,8 @@ import { createContext } from "react";
 import type { ElementOperationsContextType, GridType } from "./types";
 
 export const initialGridValues: GridType = {
-  enabled: false,
-  size: 10,
-  snap: false,
+  grid: { enabled: false, size: 10, snap: false },
+  setGrid: () => {},
 };
 
 export const ElementOperationsContext =

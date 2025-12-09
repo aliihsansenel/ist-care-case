@@ -22,6 +22,11 @@
   display: none;
 }
 
+#grid-options {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .card {
   position: absolute;
 
