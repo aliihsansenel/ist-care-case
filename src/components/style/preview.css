@@ -22,6 +22,11 @@
   display: none;
 }
 
+#preview-settings {
+  display: flex;
+  justify-content: space-between;
+}
+
 #grid-options {
   display: flex;
   justify-content: flex-end;
