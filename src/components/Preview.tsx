@@ -112,7 +112,10 @@ const Preview = () => {
           ? "0"
           : String(Number(droppedComps.at(-1)?.id) + 1);
       const newZIndex =
-        droppedComps.length === 0 ? 0 : Number(droppedComps.at(-1)?.zIndex) + 1;
+        droppedComps.length === 0
+          ? 0
+          : Math.max(...droppedComps.map((comp) => Number(comp.zIndex) || 0)) +
+            1;
       setDroppedComps([
         ...droppedComps,
         {

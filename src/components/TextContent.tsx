@@ -22,6 +22,7 @@ const TextContent = ({
 
   return (
     <ContentEditable
+      className="text-content"
       data-element-id={elementId}
       style={{
         border: "2px solid black",

@@ -127,3 +127,9 @@ export interface BuilderReturnType {
   success: boolean;
   message: string | null;
 }
+
+export interface ValidatorReturnType {
+  elements: ExportedElement[];
+  success: boolean;
+  message: string | null;
+}
