@@ -17,13 +17,9 @@ const ComponentSelector = ({
 }: ElementData): React.ReactElement => {
   switch (type) {
     case "header":
-      return (
-        <Header key={id} elementId={id} zIndex={zIndex} left={left} top={top} />
-      );
+      return <Header key={id} elementId={id} zIndex={zIndex} />;
     case "footer":
-      return (
-        <Footer key={id} elementId={id} zIndex={zIndex} left={left} top={top} />
-      );
+      return <Footer key={id} elementId={id} zIndex={zIndex} />;
     case "text-content":
       return (
         <TextContent

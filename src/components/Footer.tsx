@@ -8,8 +8,6 @@ import OptionsPanel from "./OptionsPanel";
 const Footer = ({
   elementId,
   zIndex = 0,
-  left,
-  top,
 }: {
   elementId: string | null;
   zIndex?: number;
@@ -41,13 +39,7 @@ const Footer = ({
       data-element-id={elementId}
       onClick={() => selectionEvents.publish(elementId)}
       style={{
-        border: "2px solid black",
-        position: "absolute",
-        width: "100%",
         height: size.height + "px",
-        left: left ?? 0,
-        top: top ?? undefined,
-        bottom: top ? undefined : 0,
         zIndex,
       }}
     >
