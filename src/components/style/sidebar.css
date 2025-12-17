@@ -40,6 +40,8 @@
 
 .sidebar .comps-title {
   text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 800;
 }
 
 .sidebar .comps-cont {
@@ -47,4 +49,6 @@
   flex-direction: column;
 
   row-gap: 1.2em;
+
+  margin-top: 1em;
 }

@@ -56,6 +56,8 @@ export function buildOutput(): BuilderReturnType {
       metadata,
     };
     returnObject = { output, success: true, message: "Successfull." };
+  } else {
+    returnObject.message = validation.message;
   }
 
   return returnObject;
@@ -92,8 +94,13 @@ function validateElements(): ValidatorReturnType {
     if (foundIndex !== -1) {
       let exportElement: ExportedElement | null = null;
       const exportElId = String(idx + 1).padStart(3, "0");
-      // TODO
-      const inside = true;
+
+      const elementRect = element.getBoundingClientRect();
+      const inside =
+        previewRect.left <= elementRect.left &&
+        previewRect.top <= elementRect.top &&
+        previewRect.bottom >= elementRect.bottom &&
+        previewRect.right >= elementRect.right;
       if (!errorFlag && !inside) {
         errorFlag = true;
         returnObject.message = "One of the element placed out of the canvas!";
@@ -227,13 +234,3 @@ function validateElements(): ValidatorReturnType {
   }
   return returnObject;
 }
-
-function exportJson() {
-  if (previewElement) {
-    for (const child of previewElement.children) {
-      console.log(child);
-    }
-  }
-}
-
-export default exportJson;

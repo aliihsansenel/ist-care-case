@@ -31,7 +31,9 @@ function GridOptions() {
 
   return (
     <div id="grid-options">
-      <span>Grid options</span>
+      <span>
+        <b>Grid options</b>
+      </span>
       <label>
         Size
         <input type="number" value={grid.size} onChange={handleSizeChange} />

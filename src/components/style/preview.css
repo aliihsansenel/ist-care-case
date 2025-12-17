@@ -25,13 +25,32 @@
 #preview-settings {
   display: flex;
   justify-content: space-between;
+
+  margin: 1em 0 0.6em;
 }
 
 #grid-options {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+
+  column-gap: 15px;
 }
 
+.export-elements {
+  display: flex;
+  align-items: center;
+
+  column-gap: 25px;
+}
+.export-elements button {
+  height: 2.5em;
+}
+
+input[type="number"] {
+  margin-left: 10px;
+  height: 2em;
+}
 .header {
   border: 2px solid black;
   position: "sticky";

@@ -3,11 +3,11 @@ import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
 
+import { overlapDetector } from "../utils/overlapDetector";
 import { selectionEvents } from "../utils/selectionPubSub";
 import { useResizable } from "../hooks/useResizable";
 
 import OptionsPanel from "./OptionsPanel";
-import { overlapDetector } from "../utils/overlapDetector";
 
 const TextContent = ({
   elementId,
