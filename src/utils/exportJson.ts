@@ -106,8 +106,8 @@ function validateElements(): ValidatorReturnType {
             id: exportElId,
             type: "header",
             content: {
-              text: "placeholder text", // TODO placeholder
-              style: "placeholder text", // TODO placeholder
+              text: element.textContent,
+              style: "default",
             },
             position: {
               x: 0,
@@ -134,8 +134,8 @@ function validateElements(): ValidatorReturnType {
             id: exportElId,
             type: "footer",
             content: {
-              copyright: "placeholder", // TODO placeholder
-              links: [], // TODO
+              copyright: "placeholder",
+              links: [],
             },
             position: {
               x: 0,
@@ -152,8 +152,9 @@ function validateElements(): ValidatorReturnType {
             id: exportElId,
             type: "text-content",
             content: {
-              html: "placeholder",
-              plainText: "placeholder",
+              html: element.querySelector("[contenteditable]")?.innerHTML || "",
+              plainText:
+                element.querySelector("[contenteditable]")?.textContent || "",
             },
             position: {
               x: Number(element.style.left.split("px")[0]),
@@ -170,8 +171,8 @@ function validateElements(): ValidatorReturnType {
             id: exportElId,
             type: "card",
             content: {
-              title: "placeholder",
-              description: "placeholder",
+              title: element.querySelector(".title")?.textContent || "",
+              description: element.querySelector(".desc")?.textContent || "",
               image: null,
             },
             position: {

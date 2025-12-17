@@ -1,4 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import ContentEditable, {
+  type ContentEditableEvent,
+} from "react-contenteditable";
 
 import { selectionEvents } from "../utils/selectionPubSub";
 import { useResizable } from "../hooks/useResizable";
@@ -13,6 +16,7 @@ const Header = ({
   zIndex?: number;
   left?: number | string;
 }) => {
+  const [content, setContent] = useState("");
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [isResizingMode, setIsResizingMode] = useState<boolean>(false);
   const [size, setSize] = useState({ width: 0, height: 80 });
@@ -20,6 +24,10 @@ const Header = ({
   const elementRef = useRef<HTMLDivElement | null>(null);
 
   useResizable(elementRef, (s) => setSize(s), isResizingMode);
+
+  const onContentChange = useCallback((evt: ContentEditableEvent) => {
+    setContent(evt.currentTarget.innerHTML);
+  }, []);
 
   useEffect(() => {
     const handler = (newId: string | null) => {
@@ -51,7 +59,7 @@ const Header = ({
         toggleResizingMode={() => setIsResizingMode((v) => !v)}
         allowedHandles={["bottom"]}
       >
-        Header
+        <ContentEditable onChange={onContentChange} html={content} />
       </OptionsPanel>
     </header>
   );

@@ -22,7 +22,8 @@ const Card = ({
   top: number | string;
   zIndex: number;
 }) => {
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [size, setSize] = useState({ width: 300, height: 200 });
 
@@ -42,8 +43,12 @@ const Card = ({
       elementRef.current?.classList.remove("dragging-over");
   };
 
-  const onContentChange = useCallback((evt: ContentEditableEvent) => {
-    setContent(evt.currentTarget.innerHTML);
+  const onTitleChange = useCallback((evt: ContentEditableEvent) => {
+    setTitle(evt.currentTarget.innerHTML);
+  }, []);
+
+  const onDescChange = useCallback((evt: ContentEditableEvent) => {
+    setDesc(evt.currentTarget.innerHTML);
   }, []);
 
   // Subscribe to selection and update 'isSelected' based on value published
@@ -128,7 +133,12 @@ const Card = ({
           "left",
         ]}
       >
-        <ContentEditable onChange={onContentChange} html={content} />
+        <ContentEditable
+          className="title"
+          onChange={onTitleChange}
+          html={title}
+        />
+        <ContentEditable className="desc" onChange={onDescChange} html={desc} />
       </OptionsPanel>
     </div>
   );

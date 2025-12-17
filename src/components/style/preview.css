@@ -40,6 +40,14 @@
   top: 0;
 }
 
+.header .options-panel-cont {
+  padding: 20px;
+}
+
+.header [contenteditable]{
+  font-size: 2em;
+}
+
 .footer {
   border: 2px solid black;
   position: absolute;
@@ -57,12 +65,33 @@
   left: 0;
 }
 
+.text-content .options-panel-cont {
+  padding: 15px;
+}
+
+.text-content [contenteditable]{
+  font-size: 1.2em;
+}
+
 .card {
   position: absolute;
 
   background-color: white;
   border: 2px solid black;
   border-radius: 10px;
+}
+
+.card .options-panel-cont {
+  padding: 20px;
+}
+
+.card [contenteditable].title {
+  font-size: 1.5em;
+}
+
+.card [contenteditable].desc {
+  margin-top: 1em;
+  font-size: 1em;
 }
 
 .slider {
@@ -78,9 +107,10 @@
   position: relative;
   width: 100%;
   height: 100%;
+  top: 0;
 }
 
-.options-panel-cont:not([data-selected="true"]) > * {
+.options-panel-cont:not([data-selected="true"]) .options-panel {
   display: none;
 }
 
