@@ -94,7 +94,14 @@ const Preview = () => {
       const rawLeftPx = pos.x - rect.left;
       const rawTopPx = pos.y - rect.top;
 
-      if (!gridEnabled || !gridSnap) {
+      // Set left: 0 for slider and text-content regardless of grid state on initial placement
+      if (
+        elementData.type === "slider" ||
+        elementData.type === "text-content"
+      ) {
+        left = 0;
+        top = rawTopPx;
+      } else if (!gridEnabled || !gridSnap) {
         left = `${(rawLeftPx / rect.width) * 100.0}%`;
         top = rawTopPx;
       } else {
@@ -106,7 +113,6 @@ const Preview = () => {
         top = rawTopPx;
       }
 
-      // TODO temporary id management for new item
       const newId =
         droppedComps.length === 0
           ? "0"

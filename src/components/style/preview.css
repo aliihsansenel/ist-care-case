@@ -174,7 +174,7 @@
 .resize-handle.right {
   cursor: ew-resize;
   right: -15px;
-  height: calc(100% - 110px);
+  height: max(calc(100% - 110px), 35px);
   top: calc(50% + 10px);
   transform: translateY(-50%);
 }

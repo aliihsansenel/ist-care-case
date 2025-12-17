@@ -63,6 +63,7 @@ export function buildOutput(): BuilderReturnType {
 
 function validateElements(): ValidatorReturnType {
   const previewElement: PageElement = document.getElementById("preview")!;
+  const previewRect = previewElement.getBoundingClientRect();
   const elements: ExportedElement[] = [];
   const returnObject: ValidatorReturnType = {
     elements: [],
@@ -81,6 +82,7 @@ function validateElements(): ValidatorReturnType {
     })
     .sort((a, b) => a.zIndex - b.zIndex);
 
+  let errorFlag: boolean = false;
   canvasElements.forEach((el, idx) => {
     const element = el as HTMLElement;
     const elIndex = element.getAttribute("data-element-id")!;
@@ -89,9 +91,17 @@ function validateElements(): ValidatorReturnType {
     );
     if (foundIndex !== -1) {
       let exportElement: ExportedElement | null = null;
-      const exportElId = String(idx).padStart(3, "0");
+      const exportElId = String(idx + 1).padStart(3, "0");
+      // TODO
+      const inside = true;
+      if (!errorFlag && !inside) {
+        errorFlag = true;
+        returnObject.message = "One of the element placed out of the canvas!";
+      }
+      let exportHeight;
       switch (element.className) {
         case "header":
+          exportHeight = Number(element.style.height.split("px")[0]);
           exportElement = {
             id: exportElId,
             type: "header",
@@ -100,16 +110,26 @@ function validateElements(): ValidatorReturnType {
               style: "placeholder text", // TODO placeholder
             },
             position: {
-              x: "placeholder",
-              y: "placeholder",
-              width: "placeholder",
-              height: "placeholder",
+              x: 0,
+              y: 0,
+              width: "100%",
+              height: exportHeight,
               zIndex: foundIndex + 1,
             },
-            // responsive?: ResponsiveMap;
+            responsive: {
+              mobile: {
+                width: "100%",
+                height: Math.max(40, exportHeight - 20),
+              },
+              tablet: {
+                width: "100%",
+                height: Math.max(50, exportHeight - 10),
+              },
+            },
           };
           break;
         case "footer":
+          exportHeight = Number(element.style.height.split("px")[0]);
           exportElement = {
             id: exportElId,
             type: "footer",
@@ -118,11 +138,12 @@ function validateElements(): ValidatorReturnType {
               links: [], // TODO
             },
             position: {
-              x: "placeholder",
-              y: "placeholder",
-              width: "placeholder",
-              height: "placeholder",
+              x: 0,
+              y: `calc(100% - ${exportHeight}px)`,
+              width: "100%",
+              height: exportHeight,
               zIndex: foundIndex + 1,
+              fixed: true,
             },
           };
           break;
@@ -135,12 +156,12 @@ function validateElements(): ValidatorReturnType {
               plainText: "placeholder",
             },
             position: {
-              x: "placeholder",
-              y: "placeholder",
-              width: "placeholder",
-              height: "placeholder",
+              x: Number(element.style.left.split("px")[0]),
+              y: Number(element.style.top.split("px")[0]),
+              width: Number(element.style.width?.split("px")[0]) || "auto",
+              height: "auto",
               zIndex: foundIndex + 1,
-              minHeight: undefined,
+              minHeight: 100,
             },
           };
           break;
@@ -154,15 +175,19 @@ function validateElements(): ValidatorReturnType {
               image: null,
             },
             position: {
-              x: "placeholder",
-              y: "placeholder",
-              width: "placeholder",
-              height: "placeholder",
+              x: Math.round(
+                (Number(element.style.left.split("%")[0]) / 100.0) *
+                  previewRect.width
+              ),
+              y: Number(element.style.top.split("px")[0]),
+              width: Number(element.style.width.split("px")[0]),
+              height: Number(element.style.height.split("px")[0]),
               zIndex: foundIndex + 1,
             },
           };
           break;
         case "slider":
+          exportHeight = Number(element.style.height.split("px")[0]);
           exportElement = {
             id: exportElId,
             type: "slider",
@@ -170,15 +195,19 @@ function validateElements(): ValidatorReturnType {
               image_urls: ["placeholder", "placeholder"],
             },
             position: {
-              x: "placeholder",
-              y: "placeholder",
-              width: "placeholder",
-              height: "placeholder",
+              x: 0,
+              y: 0,
+              width: "100%",
+              height: exportHeight,
               zIndex: foundIndex + 1,
             },
           };
           break;
         default:
+          if (!errorFlag && !inside) {
+            errorFlag = true;
+            returnObject.message = "Unsupported element type";
+          }
           break;
       }
       if (exportElement) {
@@ -186,10 +215,15 @@ function validateElements(): ValidatorReturnType {
       }
     }
   });
-  returnObject.elements = elements;
-  returnObject.success = true;
-  returnObject.message = "Validation satistied.";
 
+  if (errorFlag) {
+    returnObject.elements = [];
+    returnObject.success = false;
+  } else {
+    returnObject.elements = elements;
+    returnObject.success = true;
+    returnObject.message = "Validation satistied.";
+  }
   return returnObject;
 }
 
