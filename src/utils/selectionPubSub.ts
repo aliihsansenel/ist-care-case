@@ -9,7 +9,14 @@ export class SelectionPubSub {
     return () => this.subs.delete(cb);
   }
 
+  reset(id: string) {
+    if (id === this.previousValue) {
+      this.previousValue = null;
+    }
+  }
+
   publish(newId: string | null) {
+    // console.log({ newId, prev: this.previousValue });
     if (newId !== this.previousValue) {
       this.previousValue = newId;
       for (const cb of this.subs) cb(newId);

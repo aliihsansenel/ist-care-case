@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { useResizable } from "../hooks/useResizable";
 import { selectionEvents } from "../utils/selectionPubSub";
+import { overlapDetector } from "../utils/overlapDetector";
 
 import OptionsPanel from "./OptionsPanel";
 
@@ -23,6 +24,46 @@ const Slider = ({
   const elementRef = useRef<HTMLDivElement | null>(null);
   useResizable(elementRef, (s) => setSize(s), isResizingMode);
 
+  const handleDragEnter = () => {
+    if (!elementRef.current?.classList.contains("hidden"))
+      elementRef.current?.classList.add("dragging-over");
+  };
+  const handleDragLeave = (e: React.DragEvent) => {
+    if (e.target === elementRef.current)
+      elementRef.current?.classList.remove("dragging-over");
+  };
+
+  const handleDragStart = (e: React.DragEvent) => {
+    if (elementRef.current) {
+      elementRef.current.classList.add("hidden");
+      const pos = { x: e.clientX, y: e.clientY };
+      const selfRect = elementRef.current.getBoundingClientRect();
+      const offsetX = -pos.x + selfRect.left;
+      const offsetY = -pos.y + selfRect.top;
+
+      e.dataTransfer.setData(
+        "elementData",
+        JSON.stringify({
+          elementId,
+          type: "slider",
+          offsetX,
+          offsetY,
+        })
+      );
+
+      const preview = document.getElementById("preview") as HTMLElement | null;
+      if (preview) {
+        overlapDetector.beginDragExisting(preview, {
+          element: elementRef.current,
+          offsetX,
+          offsetY,
+          width: elementRef.current.offsetWidth,
+          height: elementRef.current.offsetHeight,
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     const handler = (newId: string | null) => {
       setIsSelected(newId === elementId);
@@ -35,8 +76,16 @@ const Slider = ({
   return (
     <div
       className="slider"
-      ref={elementRef}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
       data-element-id={elementId}
+      draggable={isSelected && !isResizingMode}
+      onDragStart={handleDragStart}
+      onDragEnd={() => {
+        elementRef.current?.classList.remove("hidden");
+        overlapDetector.end();
+      }}
+      ref={elementRef}
       onClick={() => selectionEvents.publish(elementId)}
       style={{
         height: size.height + "px",

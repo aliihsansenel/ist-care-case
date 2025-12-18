@@ -50,9 +50,8 @@ const OptionsPanel = <T extends HTMLElement = HTMLElement>({
       className="options-panel-cont"
       data-selected={isSelected}
       data-resizing={isResizingMode}
-      style={{}}
     >
-      <div className="options-panel">
+      <div className="options-panel" onClick={(e) => e.stopPropagation()}>
         {isResizingMode || (
           <>
             <button

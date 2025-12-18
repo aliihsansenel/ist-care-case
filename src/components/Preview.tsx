@@ -2,10 +2,10 @@ import React, { useContext, useRef } from "react";
 
 import type { ElementData, ElementDataArray } from "./types";
 import { ElementOperationsContext, GridContext } from "./contexts";
+import { selectionEvents } from "../utils/selectionPubSub";
+import { overlapDetector } from "../utils/overlapDetector";
 
 import ComponentSelector from "./ComponentSelector";
-
-import { overlapDetector } from "../utils/overlapDetector";
 
 import "./style/preview.css";
 
@@ -19,6 +19,7 @@ const Preview = () => {
   const elementRef = useRef<HTMLDivElement | null>(null);
 
   const deleteElement = (elementId: string | null) => {
+    if (elementId) selectionEvents.reset(elementId);
     setDroppedComps((comps) => comps.filter((comp) => comp.id !== elementId));
   };
 
