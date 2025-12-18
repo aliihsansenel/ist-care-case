@@ -29,7 +29,6 @@ type BeginExistingOptions = {
 class OverlapDetector {
   private previewEl: HTMLElement | null = null;
   private items: HTMLElement[] = [];
-  private excludeEl: HTMLElement | null = null;
 
   private source: DragSource | null = null;
   private draggedType: string | null = null;
@@ -77,7 +76,6 @@ class OverlapDetector {
     this.previewEl = preview;
     this.source = "sidebar";
     this.draggedType = type;
-    this.excludeEl = null;
     this.offsetX = 0;
     this.offsetY = 0;
 
@@ -93,7 +91,6 @@ class OverlapDetector {
     this.previewEl = preview;
     this.source = "existing";
     this.draggedType = null;
-    this.excludeEl = opts.element;
     this.offsetX = opts.offsetX;
     this.offsetY = opts.offsetY;
     this.dragW = opts.width;
@@ -107,7 +104,6 @@ class OverlapDetector {
     this.previewEl = preview;
     this.source = "resize";
     this.draggedType = null;
-    this.excludeEl = element;
     this.offsetX = 0;
     this.offsetY = 0;
     this.dragW = 0;
@@ -169,7 +165,6 @@ class OverlapDetector {
     this.clearHighlights();
     this.previewEl = null;
     this.items = [];
-    this.excludeEl = null;
 
     this.source = null;
     this.draggedType = null;
