@@ -1,6 +1,7 @@
 # İstanbul Care Case Project
 
 AI assisted commits indicated in the commit descriptions.
+[Demo app](https://ist-care.netlify.app/) hosted on Netlify.
 
 ### Codes created by LLM:
 - [useResizable hook](https://github.com/aliihsansenel/ist-care-case/commit/7c9fdd716c9c87ba6e36f902012aed5e095e8084)
